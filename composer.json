@@ -10,6 +10,8 @@
     ],
     "require": {
         "php": ">=5.3",
+        "vivait/common": "~1.1",
+        "psr/log": "~1.0",
         "vivait/voter": "~0.1"
     },
     "require-dev": {
