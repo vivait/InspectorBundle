@@ -1,0 +1,7 @@
+vivait_inspector_event_new:
+    pattern:  /event/new
+    defaults: { _controller: VivaitInspectorBundle:Inspection:new }
+
+vivait_inspector_event_edit:
+    pattern:  /event/edit/{event}
+    defaults: { _controller: VivaitInspectorBundle:Inspection:edit }

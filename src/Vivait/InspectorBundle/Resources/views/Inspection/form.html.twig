@@ -1,0 +1,20 @@
+{% if app.request.headers.get('X-REQUESTED-WITH') == 'XMLHttpRequest' %}
+    {% set extend_page = 'VivaitBootstrapBundle:Default:blank_base.html.twig' %}
+{% else %}
+    {% set extend_page = '::base.html.twig' %}
+{% endif %}
+{% extends extend_page|default('::base.html.twig') %}
+
+{% use 'VivaitBootstrapBundle:Partials:form.html.twig' %}
+
+{% form_theme form.form _self %}
+
+{% block sectiontitle %}
+    {{ form.title }}
+{% endblock %}
+
+{% block section %}
+    {% form_theme form.form 'VivaitBootstrapBundle:Form:polycollectionfields.html.twig' %}
+
+    {{ block('form') }}
+{% endblock %}

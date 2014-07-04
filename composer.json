@@ -1,0 +1,33 @@
+{
+    "name": "vivait/inspector-bundle",
+    "description": "A bundle that performs actions based on events, providing they pass the specified conditions",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Lewis Wright",
+            "email": "lewis@vivait.co.uk"
+        }
+    ],
+    "require": {
+        "php": ">=5.3",
+        "vivait/voter": "~0.1"
+    },
+    "require-dev": {
+        "phpspec/phpspec": "dev-master",
+        "phpunit/phpunit": "3.7.*",
+        "hautelook/alice-bundle": "*",
+        "behat/behat": "~2.5",
+        "behat/mink": "*",
+        "behat/mink-extension": "*",
+        "behat/symfony2-extension": "*",
+        "behat/mink-goutte-driver": "*",
+        "webfactory/exceptions-bundle": "@stable",
+        "vivait/scrutinizer-formatter": "dev-master",
+        "vivait/behat-alice-loader": "dev-master"
+    },
+    "autoload": {
+        "psr-0": {
+            "Vivait\\InspectorBundle\\": "src/"
+        }
+    }
+}

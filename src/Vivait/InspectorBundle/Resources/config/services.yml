@@ -1,0 +1,18 @@
+parameters:
+  vivait_inspector.register.class: Vivait\InspectorBundle\Service\RegisterService
+  vivait_inspector.serviceloader.class: Vivait\Common\Container\Service\LoaderService
+  vivait_inspector.action.sendemail.class: Vivait\InspectorBundle\Service\Action\SendEmailService
+
+services:
+  vivait_inspector.register:
+    class: %vivait_inspector.register.class%
+    arguments: [@event_dispatcher, @doctrine.orm.default_entity_manager, @vivait_inspector.serviceloader]
+
+  vivait_inspector.serviceloader:
+    class: %vivait_inspector.serviceloader.class%
+    arguments: [@service_container]
+
+  vivait_inspector.action.sendemail:
+    class: %vivait_inspector.action.sendemail.class%
+    arguments: [@swiftmailer.mailer]
+    scope: prototype
