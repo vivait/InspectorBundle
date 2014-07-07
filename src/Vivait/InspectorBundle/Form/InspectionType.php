@@ -10,7 +10,7 @@ use JMS\DiExtraBundle\Annotation as DI;
 /**
  * @DI\FormType
  */
-class EventType extends AbstractType
+class InspectionType extends AbstractType
 {
     /**
      * @param FormBuilderInterface $builder
@@ -61,7 +61,8 @@ class EventType extends AbstractType
             'infinite_form_polycollection',
             [
               'types'        => [
-                'vivait_inspectorbundle_action_sendemail'
+                'vivait_inspectorbundle_action_sendemail',
+                'vivait_inspectorbundle_action_footprint',
               ],
               'allow_add'    => true,
               'allow_delete' => true,
@@ -81,7 +82,7 @@ class EventType extends AbstractType
     {
         $resolver->setDefaults(
           array(
-            'data_class' => 'Vivait\InspectorBundle\Entity\Event'
+            'data_class' => 'Vivait\InspectorBundle\Entity\Inspection'
           )
         );
     }
@@ -91,6 +92,6 @@ class EventType extends AbstractType
      */
     public function getName()
     {
-        return 'vivait_inspectorbundle_event';
+        return 'vivait_inspectorbundle_inspection';
     }
 }

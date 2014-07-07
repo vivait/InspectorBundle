@@ -2,6 +2,7 @@ parameters:
   vivait_inspector.register.class: Vivait\InspectorBundle\Service\RegisterService
   vivait_inspector.serviceloader.class: Vivait\Common\Container\Service\LoaderService
   vivait_inspector.action.sendemail.class: Vivait\InspectorBundle\Service\Action\SendEmailService
+  vivait_inspector.action.footprint.class: Vivait\InspectorBundle\Service\Action\FootprintService
 
 services:
   vivait_inspector.register:
@@ -15,4 +16,9 @@ services:
   vivait_inspector.action.sendemail:
     class: %vivait_inspector.action.sendemail.class%
     arguments: [@swiftmailer.mailer]
+    scope: prototype
+
+  vivait_inspector.action.footprint:
+    class: %vivait_inspector.action.footprint.class%
+    arguments: [@vivait.footprint.message]
     scope: prototype

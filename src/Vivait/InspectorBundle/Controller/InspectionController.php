@@ -31,7 +31,7 @@ class InspectionController extends Controller {
     }
 
     public function editAction(Request $request, Inspection $inspection, $is_new = false) {
-        $form = $this->createForm('vivait_inspectorbundle_event', $inspection);
+        $form = $this->createForm('vivait_inspectorbundle_inspection', $inspection);
         $form->handleRequest($request);
 
         if ($form->isValid()) {

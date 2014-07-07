@@ -56,6 +56,7 @@ class FeatureContext extends MinkContext
         $this->parameters = $parameters;
 
         $this->useContext('fixtures', new AliceContext($parameters));
+        $this->useContext('fixtures', new AliceContext($parameters));
     }
 
     /**
