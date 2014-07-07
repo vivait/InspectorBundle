@@ -73,7 +73,7 @@ class RegisterService
         $voter = $inspection->getVoter();
         $voter->addConditions($this->serviceloader->loadServices($inspection->getConditions()));
 
-        return new ActionDispatcher($voter, $actions, $this->logger);
+        return new ActionDispatcher($inspection->getName(), $voter, $actions, $this->logger);
     }
 
     /**
@@ -98,7 +98,6 @@ class RegisterService
               $eventName,
               function (EntityEvent $event, $eventName) use ($handler, $inspectionName) {
                   $this->logger->info(sprintf('Calling inspection "%s" for event "%s"', $inspectionName, $eventName));
-
                   $handler->perform($event->provides());
               }
             );
