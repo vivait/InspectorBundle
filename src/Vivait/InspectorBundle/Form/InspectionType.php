@@ -47,6 +47,7 @@ class InspectionType extends AbstractType
               'allow_delete' => true,
               'by_reference' => false,
               'options'      => [
+                  'show_child_legend' => true,
                 'label_render'                   => false,
                 'horizontal_input_wrapper_class' => "col-lg-8",
               ]
