@@ -3,6 +3,11 @@ parameters:
   vivait_inspector.serviceloader.class: Vivait\Common\Container\Service\LoaderService
   vivait_inspector.action.sendemail.class: Vivait\InspectorBundle\Service\Action\SendEmailService
   vivait_inspector.action.footprint.class: Vivait\InspectorBundle\Service\Action\FootprintService
+  vivait_inspector.inspection.type.class: Vivait\InspectorBundle\Form\InspectionType
+  vivait_inspector.condition.type.class: Vivait\InspectorBundle\Form\ConditionType
+  vivait_inspector.action.footprint.type.class: Vivait\InspectorBundle\Form\Action\FootprintType
+  vivait_inspector.action.sendemail.type.class: Vivait\InspectorBundle\Form\Action\SendEmailType
+  vivait_inspector.condition.expression.type.class: Vivait\InspectorBundle\Form\Condition\ExpressionType
 
 services:
   vivait_inspector.register:
@@ -22,3 +27,28 @@ services:
     class: %vivait_inspector.action.footprint.class%
     arguments: [@vivait.footprint.message]
     scope: prototype
+
+  vivait_inspector.inspection.type:
+    class: %vivait_inspector.inspection.type.class%
+    tags:
+       -  { name: form.type,  alias: vivait_inspectorbundle_inspection }
+
+  vivait_inspector.condition.type:
+    class: %vivait_inspector.condition.type.class%
+    tags:
+       -  { name: form.type,  alias: vivait_inspectorbundle_condition }
+
+  vivait_inspector.action.footprint.type:
+    class: %vivait_inspector.action.footprint.type.class%
+    tags:
+       -  { name: form.type,  alias: vivait_inspectorbundle_action_footprint }
+
+  vivait_inspector.action.sendemail.type:
+    class: %vivait_inspector.action.sendemail.type.class%
+    tags:
+       -  { name: form.type,  alias: vivait_inspectorbundle_action_sendemail }
+
+  vivait_inspector.condition.expression.type:
+    class: %vivait_inspector.condition.expression.type.class%
+    tags:
+       -  { name: form.type,  alias: vivait_inspectorbundle_condition_expression }

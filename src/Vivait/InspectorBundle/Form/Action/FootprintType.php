@@ -2,17 +2,12 @@
 
 namespace Vivait\InspectorBundle\Form\Action;
 
-use Doctrine\ORM\EntityManager;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use JMS\DiExtraBundle\Annotation as DI;
+use Vivait\InspectorBundle\Form\ActionType;
 use Vivait\InspectorBundle\Form\ConditionType;
 
-/**
- * @DI\FormType
- */
-class FootprintType extends ConditionType
+class FootprintType extends ActionType
 {
     protected $dataClass = 'Vivait\InspectorBundle\Entity\Action\Footprint';
     protected $label     = 'Canned Message';

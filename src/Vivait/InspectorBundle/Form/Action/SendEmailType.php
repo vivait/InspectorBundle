@@ -4,13 +4,10 @@ namespace Vivait\InspectorBundle\Form\Action;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use JMS\DiExtraBundle\Annotation as DI;
+use Vivait\InspectorBundle\Form\ActionType;
 use Vivait\InspectorBundle\Form\ConditionType;
 
-/**
- * @DI\FormType
- */
-class SendEmailType extends ConditionType
+class SendEmailType extends ActionType
 {
     protected $dataClass = 'Vivait\InspectorBundle\Entity\Action\SendEmail';
     protected $label     = 'Send Email';

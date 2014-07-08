@@ -5,11 +5,7 @@ namespace Vivait\InspectorBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use JMS\DiExtraBundle\Annotation as DI;
 
-/**
- * @DI\FormType
- */
 class InspectionType extends AbstractType
 {
     /**
@@ -45,7 +41,7 @@ class InspectionType extends AbstractType
             'infinite_form_polycollection',
             [
               'types'        => [
-                'vivait_inspectorbundle_condition_expression'
+                'Expression' => 'vivait_inspectorbundle_condition_expression'
               ],
               'allow_add'    => true,
               'allow_delete' => true,
@@ -61,8 +57,8 @@ class InspectionType extends AbstractType
             'infinite_form_polycollection',
             [
               'types'        => [
-                'vivait_inspectorbundle_action_sendemail',
-                'vivait_inspectorbundle_action_footprint',
+                'Send email' => 'vivait_inspectorbundle_action_sendemail',
+                'Footprint' => 'vivait_inspectorbundle_action_footprint',
               ],
               'allow_add'    => true,
               'allow_delete' => true,
