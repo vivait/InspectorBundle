@@ -5,6 +5,7 @@ namespace Vivait\InspectorBundle\Entity\Action;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Vivait\InspectorBundle\Entity\Action;
+use Vivait\InspectorBundle\Form\ActionType;
 use Vivait\Voter\Model\ActionInterface;
 
 /**
@@ -104,5 +105,13 @@ class SendEmail extends Action
         $sendemail->setEntity($this);
 
         return $sendemail;
+    }
+
+    /**
+     * @return ActionType
+     */
+    public function getFormType()
+    {
+        return 'vivait_inspectorbundle_action_sendemail';
     }
 }

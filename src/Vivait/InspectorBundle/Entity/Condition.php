@@ -5,11 +5,12 @@ namespace Vivait\InspectorBundle\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Vivait\Common\Container\ServiceEntity;
+use Vivait\InspectorBundle\Form\ActionType;
 
 /**
  * @ORM\MappedSuperclass
  * @ORM\Table(name="InspectorCondition")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Vivait\InspectorBundle\Entity\ConditionRepository")
  * @ORM\InheritanceType("SINGLE_TABLE")
  */
 abstract class Condition implements ServiceEntity
@@ -67,4 +68,10 @@ abstract class Condition implements ServiceEntity
     {
         return $this->inspection;
     }
+
+    /**
+     * @return ActionType
+     */
+    public abstract function getFormType();
+
 }

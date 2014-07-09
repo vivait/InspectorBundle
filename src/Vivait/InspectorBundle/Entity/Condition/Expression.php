@@ -6,6 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 use Vivait\InspectorBundle\Entity\Condition;
+use Vivait\InspectorBundle\Form\ActionType;
 use Vivait\Voter\Model\ConditionInterface;
 
 /**
@@ -103,5 +104,13 @@ class Expression extends Condition implements ConditionInterface
     public function __toString()
     {
         return sprintf('Expression: %s', $this->getExpression());
+    }
+
+    /**
+     * @return ActionType
+     */
+    public function getFormType()
+    {
+        return 'vivait_inspectorbundle_condition_expression';
     }
 }

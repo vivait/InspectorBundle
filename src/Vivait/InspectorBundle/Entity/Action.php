@@ -6,12 +6,13 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Vivait\Common\Container\ServiceEntity;
+use Vivait\InspectorBundle\Form\ActionType;
 use Vivait\Voter\Model\ActionInterface;
 
 /**
  * Action
  * @ORM\Table(name="InspectorAction")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Vivait\InspectorBundle\Entity\ActionRepository")
  * @ORM\InheritanceType("SINGLE_TABLE")
  */
 abstract class Action implements ServiceEntity
@@ -69,4 +70,9 @@ abstract class Action implements ServiceEntity
     {
         return $this->inspection;
     }
+
+    /**
+     * @return ActionType
+     */
+    public abstract function getFormType();
 }

@@ -3,36 +3,36 @@
 namespace Vivait\InspectorBundle\Service;
 
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Vivait\Voter\Dispatcher\ActionDispatcher;
-use Vivait\Voter\Model\EntityEvent;
-use Vivait\InspectorBundle\Entity\Inspection;
 use Vivait\Voter\Model\VoterInterface;
 
-class RegisterService
+class VoterRegistryService
 {
     private $voters;
 
-    function __construct(EventDispatcherInterface $dispatcher)
+    /**
+     * @param array $voters
+     */
+    function __construct(array $voters = array())
     {
-        $this->dispatcher = $dispatcher;
+        $this->voters = $voters;
     }
 
-    public function registerVoter($alias, VoterInterface $voter){
-        if (isset($this->voters[$alias])) {
-            throw new \InvalidArgumentException(sprintf('Voter with alias %s already exists', $alias));
+    /**
+     * @param $label
+     * @param VoterInterface $voter
+     */
+    public function addVoter($label, VoterInterface $voter){
+        if (isset($this->voters[$label])) {
+            throw new \InvalidArgumentException(sprintf('Voter with label %s already exists', $label));
         }
 
-        $this->voters = $voter;
+        $this->voters[$label] = $voter;
     }
 
     /**
      * @return array
-     * @todo This needs to be dynamic
      */
     public function getVotersList() {
-        return [
-            'And',
-            'Or'
-        ];
+        return array_keys($this->voters);
     }
 } 

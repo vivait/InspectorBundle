@@ -8,6 +8,9 @@ parameters:
   vivait_inspector.action.footprint.type.class: Vivait\InspectorBundle\Form\Action\FootprintType
   vivait_inspector.action.sendemail.type.class: Vivait\InspectorBundle\Form\Action\SendEmailType
   vivait_inspector.condition.expression.type.class: Vivait\InspectorBundle\Form\Condition\ExpressionType
+  vivait_inspector.voter.registry.class: Vivait\InspectorBundle\Service\VoterRegistryService
+  vivait_inspector.voter.and.class: Vivait\Voter\Voter\AndVoter
+  vivait_inspector.voter.or.class: Vivait\Voter\Voter\OrVoter
 
 services:
   vivait_inspector.register:
@@ -30,6 +33,9 @@ services:
 
   vivait_inspector.inspection.type:
     class: %vivait_inspector.inspection.type.class%
+    factory_class: %vivait_inspector.inspection.type.class%
+    factory_method: factory
+    arguments: [@doctrine.orm.default_entity_manager, @vivait_inspector.voter.registry]
     tags:
        -  { name: form.type,  alias: vivait_inspectorbundle_inspection }
 
@@ -52,3 +58,16 @@ services:
     class: %vivait_inspector.condition.expression.type.class%
     tags:
        -  { name: form.type,  alias: vivait_inspectorbundle_condition_expression }
+
+  vivait_inspector.voter.registry:
+    class: %vivait_inspector.voter.registry.class%
+
+  vivait_inspector.voter.and:
+    class: %vivait_inspector.voter.and.class%
+    tags:
+       -  { name: vivait_inspector.voter, label: 'And' }
+
+  vivait_inspector.voter.or:
+    class: %vivait_inspector.voter.or.class%
+    tags:
+       -  { name: vivait_inspector.voter, label: 'Or' }

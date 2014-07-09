@@ -2,12 +2,57 @@
 
 namespace Vivait\InspectorBundle\Form;
 
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Vivait\InspectorBundle\Entity\Action;
+use Vivait\InspectorBundle\Entity\Condition;
+use Vivait\InspectorBundle\Service\VoterRegistryService;
 
 class InspectionType extends AbstractType
 {
+    /**
+     * @var ActionType[]
+     */
+    private $actionTypes;
+
+    /**
+     * @var ConditionType[]
+     */
+    private $conditionTypes;
+
+    /**
+     * @var array
+     */
+    private $voters;
+
+    public function __construct(array $conditionTypes, array $actionTypes, array $voters)
+    {
+        $this->conditionTypes = $conditionTypes;
+        $this->actionTypes = $actionTypes;
+        $this->voters = $voters;
+    }
+
+    public static function factory(EntityManagerInterface $em, VoterRegistryService $registry)
+    {
+        return new static(
+          array_map(
+            function (Condition $condition) {
+                return $condition->getFormType();
+            },
+            $em->getRepository('VivaitInspectorBundle:Condition')->generateAllPolyObjects()
+          ),
+          array_map(
+            function (Action $action) {
+                return $action->getFormType();
+            },
+            $em->getRepository('VivaitInspectorBundle:Action')->generateAllPolyObjects()
+          ),
+          $registry->getVotersList()
+        );
+    }
+
     /**
      * @param FormBuilderInterface $builder
      * @param array $options
@@ -19,7 +64,7 @@ class InspectionType extends AbstractType
             'eventName',
             'choice',
             [
-              'label'   => 'Triggered by',
+              'label' => 'Triggered by',
               'choices' => [
                 'Queue Change',
                 'Each day'
@@ -30,26 +75,20 @@ class InspectionType extends AbstractType
             'voterType',
             'choice',
             [
-              'choices' => [
-                'And',
-                'Or'
-              ]
+              'choices' => $this->voters
             ]
           )
           ->add(
             'conditions',
             'infinite_form_polycollection',
             [
-              'types'        => [
-                'Expression' => 'vivait_inspectorbundle_condition_expression'
-              ],
-              'allow_add'    => true,
+              'types' => $this->conditionTypes,
+              'allow_add' => true,
               'allow_delete' => true,
               'by_reference' => false,
-              'options'      => [
-                  'show_child_legend' => true,
-                'label_render'                   => false,
-                'horizontal_input_wrapper_class' => "col-lg-8",
+              'options' => [
+                'show_child_legend' => true,
+                'label_render' => false
               ]
             ]
           )
@@ -57,16 +96,13 @@ class InspectionType extends AbstractType
             'actions',
             'infinite_form_polycollection',
             [
-              'types'        => [
-                'Send email' => 'vivait_inspectorbundle_action_sendemail',
-                'Footprint' => 'vivait_inspectorbundle_action_footprint',
-              ],
-              'allow_add'    => true,
+              'types' => $this->actionTypes,
+              'allow_add' => true,
               'allow_delete' => true,
               'by_reference' => false,
-              'options'      => [
-                'label_render'                   => false,
-                'horizontal_input_wrapper_class' => "col-lg-8",
+              'options' => [
+                'show_child_legend' => true,
+                'label_render' => false
               ]
             ]
           );

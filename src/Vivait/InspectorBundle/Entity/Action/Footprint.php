@@ -8,6 +8,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Vivait\Common\Model\Task\LetterInterface;
 use Vivait\FootprintBundle\Entity\CannedMessage;
 use Vivait\InspectorBundle\Entity\Action;
+use Vivait\InspectorBundle\Form\ActionType;
 use Vivait\InspectorBundle\Service\Action\FootprintService;
 
 /**
@@ -51,5 +52,13 @@ class Footprint extends Action
         $this->canned = $canned;
 
         return $this;
+    }
+
+    /**
+     * @return ActionType
+     */
+    public function getFormType()
+    {
+        return 'vivait_inspectorbundle_action_footprint';
     }
 }
