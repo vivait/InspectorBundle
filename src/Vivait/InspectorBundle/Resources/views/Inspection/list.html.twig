@@ -1,0 +1,30 @@
+{% extends '::base.html.twig' %}
+{% block sectionlinks %}
+    <a href="{{ path('vivait_inspector_maintenance_inspection_new') }}" class="btn ajax-dialog" title="Add Inspection"><i class="glyphicon glyphicon-plus-sign"></i> Add Inspection</a>
+{% endblock %}
+{% block sectiontitle %}
+    Inspection
+{% endblock %}
+{% block section %}
+    <div class="row">
+        {% if inspections | length > 0 %}
+            <div class="panel panel-default">
+            <div class="panel-heading"><h3>{{ db.0.category }}</h3></div>
+            <table class="table table-condensed table-bordered table-hover">
+            <thead>
+            <tr>
+                <th>Name</th>
+            </tr>
+            </thead>
+            {% for row in inspections %}
+                <tr>
+                    <td><a href="{{ path('vivait_inspector_maintenance_inspection_edit', {'inspection': row.id }) }}" class="ajax-dialog">{{ row.name }}</a></td>
+                </tr>
+            {% endfor %}
+            </table>
+            </div>
+        {% else %}
+            <p>There are no inspections set up</p>
+        {% endif %}
+    </div>
+{% endblock %}
