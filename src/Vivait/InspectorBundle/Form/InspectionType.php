@@ -49,7 +49,7 @@ class InspectionType extends AbstractType
             },
             $em->getRepository('VivaitInspectorBundle:Action')->generateAllPolyObjects()
           ),
-          $registry->getVotersList()
+          $registry->getList()
         );
     }
 

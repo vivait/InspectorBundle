@@ -45,7 +45,12 @@ class CustomerEvent extends Event implements EntityEventInterface
     public function provides()
     {
         return [
-            'Viva\BravoBundle\Entity\Customer' => $this->customer
+          'Viva\BravoBundle\Entity\Customer' => $this->customer
         ];
+    }
+
+    public function getEvents()
+    {
+        return ['customer.update' => 'Customer update'];
     }
 }

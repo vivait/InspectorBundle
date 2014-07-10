@@ -11,6 +11,7 @@ parameters:
   vivait_inspector.voter.registry.class: Vivait\InspectorBundle\Service\VoterRegistryService
   vivait_inspector.voter.and.class: Vivait\Voter\Voter\AndVoter
   vivait_inspector.voter.or.class: Vivait\Voter\Voter\OrVoter
+  vivait_inspector.event.registry.class: Vivait\InspectorBundle\Service\EventRegistryService
 
 services:
   vivait_inspector.register:
@@ -48,6 +49,7 @@ services:
     class: %vivait_inspector.action.footprint.type.class%
     tags:
        -  { name: form.type,  alias: vivait_inspectorbundle_action_footprint }
+       -  { name: vivait_inspector.voter, label: 'And' }
 
   vivait_inspector.action.sendemail.type:
     class: %vivait_inspector.action.sendemail.type.class%
@@ -61,6 +63,9 @@ services:
 
   vivait_inspector.voter.registry:
     class: %vivait_inspector.voter.registry.class%
+
+  vivait_inspector.event.registry:
+    class: %vivait_inspector.event.registry.class%
 
   vivait_inspector.voter.and:
     class: %vivait_inspector.voter.and.class%

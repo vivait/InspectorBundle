@@ -32,7 +32,7 @@ class VoterRegistryService
     /**
      * @return array
      */
-    public function getVotersList() {
+    public function getList() {
         return array_keys($this->voters);
     }
 } 

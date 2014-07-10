@@ -14,7 +14,6 @@ use Vivait\InspectorBundle\Service\Action\FootprintService;
 /**
  * Footprint
  *
- * @todo This should really use a canned message and just show a picklist
  * @ORM\Table()
  * @ORM\Entity()
  */
