@@ -49,7 +49,6 @@ services:
     class: %vivait_inspector.action.footprint.type.class%
     tags:
        -  { name: form.type,  alias: vivait_inspectorbundle_action_footprint }
-       -  { name: vivait_inspector.voter, label: 'And' }
 
   vivait_inspector.action.sendemail.type:
     class: %vivait_inspector.action.sendemail.type.class%
