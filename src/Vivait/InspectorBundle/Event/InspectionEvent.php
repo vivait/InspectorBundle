@@ -3,8 +3,9 @@
 namespace Vivait\InspectorBundle\Event;
 
 use Symfony\Component\EventDispatcher\Event;
+use Vivait\Common\Event\EntityEvent;
 
-class InspectionEvent extends Event {
+class InspectionEvent extends EntityEvent {
 
     /**
      * @var \Vivait\InspectorBundle\Entity\Inspection
@@ -35,5 +36,10 @@ class InspectionEvent extends Event {
         $this->inspection = $inspection;
 
         return $this;
+    }
+
+    public static function getEntityTypeLabel()
+    {
+        return 'inspection';
     }
 }

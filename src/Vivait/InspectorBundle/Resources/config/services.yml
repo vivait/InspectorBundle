@@ -1,17 +1,28 @@
 parameters:
   vivait_inspector.register.class: Vivait\InspectorBundle\Service\RegisterService
   vivait_inspector.serviceloader.class: Vivait\Common\Container\Service\LoaderService
-  vivait_inspector.action.sendemail.class: Vivait\InspectorBundle\Service\Action\SendEmailService
-  vivait_inspector.action.footprint.class: Vivait\InspectorBundle\Service\Action\FootprintService
+
   vivait_inspector.inspection.type.class: Vivait\InspectorBundle\Form\InspectionType
-  vivait_inspector.condition.type.class: Vivait\InspectorBundle\Form\ConditionType
-  vivait_inspector.action.footprint.type.class: Vivait\InspectorBundle\Form\Action\FootprintType
+
+  vivait_inspector.action.sendemail.class: Vivait\InspectorBundle\Service\Action\SendEmailService
   vivait_inspector.action.sendemail.type.class: Vivait\InspectorBundle\Form\Action\SendEmailType
+
+  vivait_inspector.action.footprint.class: Vivait\InspectorBundle\Service\Action\FootprintService
+  vivait_inspector.action.footprint.type.class: Vivait\InspectorBundle\Form\Action\FootprintType
+
+  vivait_inspector.condition.type.class: Vivait\InspectorBundle\Form\ConditionType
   vivait_inspector.condition.expression.type.class: Vivait\InspectorBundle\Form\Condition\ExpressionType
+
+  vivait_inspector.event.registry.class: Vivait\InspectorBundle\Service\EventRegistryService
   vivait_inspector.voter.registry.class: Vivait\InspectorBundle\Service\VoterRegistryService
+  vivait_inspector.event.provider.class: Vivait\InspectorBundle\Service\EventProviderService
+
   vivait_inspector.voter.and.class: Vivait\Voter\Voter\AndVoter
   vivait_inspector.voter.or.class: Vivait\Voter\Voter\OrVoter
-  vivait_inspector.event.registry.class: Vivait\InspectorBundle\Service\EventRegistryService
+
+  vivait_inspector.metadata_factory.class: Metadata\MetadataFactory
+  vivait_inspector.metadata.cache_class: Metadata\Cache\FileCache
+  vivait_inspector.metadata.annotation_driver.class: Vivait\InspectorBundle\Metadata\Driver\AnnotationDriver
 
 services:
   vivait_inspector.register:
@@ -36,7 +47,7 @@ services:
     class: %vivait_inspector.inspection.type.class%
     factory_class: %vivait_inspector.inspection.type.class%
     factory_method: factory
-    arguments: [@doctrine.orm.default_entity_manager, @vivait_inspector.voter.registry]
+    arguments: [@doctrine.orm.default_entity_manager, @vivait_inspector.voter.registry, @vivait_inspector.event.registry]
     tags:
        -  { name: form.type,  alias: vivait_inspectorbundle_inspection }
 
@@ -66,6 +77,10 @@ services:
   vivait_inspector.event.registry:
     class: %vivait_inspector.event.registry.class%
 
+  vivait_inspector.event.provider:
+    class: %vivait_inspector.event.provider.class%
+
+
   vivait_inspector.voter.and:
     class: %vivait_inspector.voter.and.class%
     tags:
@@ -75,3 +90,17 @@ services:
     class: %vivait_inspector.voter.or.class%
     tags:
        -  { name: vivait_inspector.voter, label: 'Or' }
+
+  vivait_inspector.metadata.annotation_driver:
+    class: %vivait_inspector.metadata.annotation_driver.class%
+    public: false
+    arguments: ['@annotation_reader']
+
+  vivait_inspector.metadata_factory:
+    class: %vivait_inspector.metadata_factory.class%
+    arguments: ['@vivait_inspector.metadata.annotation_driver']
+
+  vivait_inspector.metadata.cache:
+    class: %vivait_inspector.metadata.cache_class%
+    arguments: ['']
+    public: false

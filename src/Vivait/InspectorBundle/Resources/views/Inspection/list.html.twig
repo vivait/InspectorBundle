@@ -8,9 +8,7 @@
 {% block section %}
     <div class="row">
         {% if inspections | length > 0 %}
-            <div class="panel panel-default">
-            <div class="panel-heading"><h3>{{ db.0.category }}</h3></div>
-            <table class="table table-condensed table-bordered table-hover">
+            <table class="table table-bordered table-hover">
             <thead>
             <tr>
                 <th>Name</th>
@@ -22,7 +20,6 @@
                 </tr>
             {% endfor %}
             </table>
-            </div>
         {% else %}
             <p>There are no inspections set up</p>
         {% endif %}

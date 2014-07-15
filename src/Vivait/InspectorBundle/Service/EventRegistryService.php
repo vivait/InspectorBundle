@@ -9,7 +9,7 @@ class EventRegistryService
     /**
      * @param array $events
      */
-    function __construct(array $events = array())
+    function __construct(array $events = [])
     {
         $this->events = $events;
     }
@@ -19,7 +19,8 @@ class EventRegistryService
      * @param string $event
      * @todo This needs to store what each event provides
      */
-    public function addEvent($label, $event){
+    public function addEvent($label, $event)
+    {
         if (isset($this->events[$event])) {
             throw new \InvalidArgumentException(sprintf('Event %s already exists', $event));
         }
@@ -30,7 +31,21 @@ class EventRegistryService
     /**
      * @return array
      */
-    public function getList() {
+    public function getList()
+    {
         return $this->events;
+    }
+
+    /**
+     * Gets events
+     * @return array
+     */
+    public function getEvents()
+    {
+        return $this->events;
+    }
+
+    public function hasEvent($event) {
+        return (isset($this->events[$event]));
     }
 } 

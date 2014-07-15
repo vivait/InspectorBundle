@@ -20,9 +20,16 @@ class Configuration implements ConfigurationInterface
         $treeBuilder = new TreeBuilder();
         $rootNode = $treeBuilder->root('vivait_inspector');
 
-        // Here you should define the parameters that are allowed to
-        // configure your bundle. See the documentation linked above for
-        // more information on that topic.
+        $rootNode
+          ->fixXmlConfig('event_location', 'event_locations')
+          ->children()
+              ->arrayNode('event_locations')
+              ->useAttributeAsKey('namespace')
+              ->prototype('scalar')
+              ->cannotBeEmpty()
+              ->end()
+          ->end();
+
 
         return $treeBuilder;
     }

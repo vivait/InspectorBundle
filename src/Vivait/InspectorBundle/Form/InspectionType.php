@@ -8,6 +8,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Vivait\InspectorBundle\Entity\Action;
 use Vivait\InspectorBundle\Entity\Condition;
+use Vivait\InspectorBundle\Service\EventRegistryService;
 use Vivait\InspectorBundle\Service\VoterRegistryService;
 
 class InspectionType extends AbstractType
@@ -25,16 +26,22 @@ class InspectionType extends AbstractType
     /**
      * @var array
      */
+    private $eventsList;
+
+    /**
+     * @var array
+     */
     private $voters;
 
-    public function __construct(array $conditionTypes, array $actionTypes, array $voters)
+    public function __construct(array $conditionTypes, array $actionTypes, array $voters, array $eventsList)
     {
         $this->conditionTypes = $conditionTypes;
         $this->actionTypes = $actionTypes;
         $this->voters = $voters;
+        $this->eventsList = $eventsList;
     }
 
-    public static function factory(EntityManagerInterface $em, VoterRegistryService $registry)
+    public static function factory(EntityManagerInterface $em, VoterRegistryService $registry, EventRegistryService $eventRegistry)
     {
         return new static(
           array_map(
@@ -49,7 +56,8 @@ class InspectionType extends AbstractType
             },
             $em->getRepository('VivaitInspectorBundle:Action')->generateAllPolyObjects()
           ),
-          $registry->getList()
+          $registry->getList(),
+          $eventRegistry->getList()
         );
     }
 
@@ -61,14 +69,18 @@ class InspectionType extends AbstractType
     {
         $builder
           ->add(
+            'name',
+            'text',
+            [
+              'label' => 'Inspection name'
+            ]
+          )
+          ->add(
             'eventName',
             'choice',
             [
               'label' => 'Triggered by',
-              'choices' => [
-                'Queue Change',
-                'Each day'
-              ]
+              'choices' => $this->eventsList
             ]
           )
           ->add(
@@ -114,9 +126,9 @@ class InspectionType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(
-          array(
+          [
             'data_class' => 'Vivait\InspectorBundle\Entity\Inspection'
-          )
+          ]
         );
     }
 

@@ -2,6 +2,10 @@
 
 namespace Vivait\InspectorBundle\Controller;
 
+use Assetic\Factory\Resource\DirectoryResource;
+use Metadata\Driver\FileLocator;
+use Symfony\Component\Config\ConfigCache;
+use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpFoundation\Request;
 use Vivait\BootstrapBundle\Controller\Controller;
 use Vivait\InspectorBundle\Entity\Inspection;
@@ -29,7 +33,17 @@ class InspectionController extends Controller
     public function indexAction() {
         $inspections = $this->getRepository()->findAll();
 
-        return $this->render('VivaitInspectorBundle:Inspection:list.html.twig', array('inspections' => $inspections));
+
+        //$cachePath = '/Users/lewis/PHP/bravo/src/Viva/BravoBundle/Event';
+
+//        $finder = new FileLocator([$cachePath]);
+//        $test = $finder->findAllClasses('php');
+//
+//        var_dump($test);
+
+        //$this->get('vivait_inspector.metadata_factory')->getMetadataForClass();
+
+        return $this->render('VivaitInspectorBundle:Inspection:list.html.twig', ['inspections' => $inspections]);
     }
 
     public function newAction(Request $request)

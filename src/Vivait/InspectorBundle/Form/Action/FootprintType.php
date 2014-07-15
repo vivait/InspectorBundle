@@ -15,7 +15,7 @@ class FootprintType extends ActionType
     public function buildForm(FormBuilderInterface $builder, array $options) {
         parent::buildForm($builder, $options);
 
-        $builder->add('cannedmessage', 'entity', array(
+        $builder->add('canned', 'entity', array(
             'class'       => 'VivaitFootprintBundle:CannedMessage',
             'required'    => true,
             'property'    => 'name',
