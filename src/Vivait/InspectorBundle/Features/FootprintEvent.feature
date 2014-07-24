@@ -15,7 +15,7 @@ Feature: Footprint Event
       | c1  | john.smith@vivait.co.uk | John     | Smith   |
     And there are the following "VivaitInspectorBundle:Inspection":
       | eventName       | name       | voterType |
-      | customer.update | Behat test | 2         |
+      | customer.update | Behat test | and       |
     And there are the following "VivaitInspectorBundle:Condition\Expression":
       | expression                           | inspection       |
       | "customer.getName() == 'John Smith'" | @customer.update |
@@ -23,8 +23,8 @@ Feature: Footprint Event
       | @id | customer |
       | ft1 | @c1      |
     And there are the following "VivaitFootprintBundle:Footprint\Email":
-      | @id | contact | message | subject | fromuser   | fromtenant | footprinttype |
-      | m1  | 0       | This is a test    | Testing | @TestUser1 | @TE1       | @ft1          |
+      | @id | contact | message        | subject | fromuser   | fromtenant | footprinttype |
+      | m1  | 0       | This is a test | Testing | @TestUser1 | @TE1       | @ft1          |
     And there are the following "VivaitFootprintBundle:CannedMessage":
       | @id | category | name | description | message |
       | cm1 | Tests    | Test | Testing     | @m1     |

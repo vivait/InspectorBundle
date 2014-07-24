@@ -26,13 +26,25 @@ class FootprintService implements ActionInterface
         $this->messageService = $messageService;
     }
 
-    public function perform($entity)
+    public function perform($entities)
     {
         if (!$this->cannedMessage) {
             throw new \RuntimeException('No canned message has been specified');
         }
 
-        $footprint = clone $this->cannedMessage->getMessage();
+        $original = $this->cannedMessage->getMessage();
+
+        $footprint = clone $original;
+        $type = $footprint->getFootprintType();
+
+        if (!$type) {
+            throw new \RuntimeException('No type set for canned footprint');
+        }
+        // TODO: This should specify which entity to perform the footprint on
+        $type->setForeignEntity(reset($entities));
+//        $type->setFootprint($footprint);
+//        $footprint->setFootprintType($type);
+
 
         $this->messageService->send($footprint);
     }

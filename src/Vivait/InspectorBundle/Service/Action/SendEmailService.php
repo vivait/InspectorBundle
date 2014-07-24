@@ -24,7 +24,7 @@ class SendEmailService implements ActionInterface
         $this->mailer = $mailer;
     }
 
-    public function perform($entity)
+    public function perform($entities)
     {
         if (!$this->entity) {
             throw new \RuntimeException('No entity has been specified');

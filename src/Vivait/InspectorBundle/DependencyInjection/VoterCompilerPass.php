@@ -26,6 +26,7 @@ class VoterCompilerPass implements CompilerPassInterface
                 $definition->addMethodCall(
                   'addVoter',
                   [
+                    isset($attributes['alias']) ? $attributes['alias'] : $id,
                     $attributes['label'],
                     new Reference($id)
                   ]

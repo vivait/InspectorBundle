@@ -14,7 +14,7 @@ class TestActionService implements ActionInterface
         // TODO: Implement requires() method.
     }
 
-    public function perform($entity)
+    public function perform($entities)
     {
         // TODO: Implement perform() method.
     }

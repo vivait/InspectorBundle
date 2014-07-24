@@ -44,9 +44,9 @@ class Inspection
     private $eventName;
 
     /**
-     * @var integer
+     * @var string
      *
-     * @ORM\Column(name="voterType", type="smallint")
+     * @ORM\Column(name="voterType", type="string")
      */
     private $voterType;
 
@@ -63,11 +63,6 @@ class Inspection
      * @ORM\OneToMany(targetEntity="Vivait\InspectorBundle\Entity\Action", mappedBy="inspection", cascade={"persist", "remove"}, orphanRemoval=true)
      */
     private $actions;
-
-    /**
-     * @var VoterInterface
-     */
-    private $voter;
 
     /**
      * Constructor
@@ -91,7 +86,7 @@ class Inspection
     /**
      * Set voterType
      *
-     * @param integer $voterType
+     * @param string $voterType
      * @return Inspection
      */
     public function setVoterType($voterType)
@@ -104,7 +99,7 @@ class Inspection
     /**
      * Get voterType
      *
-     * @return integer
+     * @return string
      */
     public function getVoterType()
     {
@@ -147,23 +142,6 @@ class Inspection
     public function getConditions()
     {
         return $this->conditions;
-    }
-
-    public function getVoter(){
-        if (!$this->voter) {
-            switch ($this->getVoterType()) {
-                case self::VOTER_TYPE_AND:
-                    $this->voter = new AndVoter();
-                    break;
-                case self::VOTER_TYPE_OR:
-                    $this->voter = new OrVoter();
-                    break;
-                default:
-                    throw new \Exception('Could not load voter type');
-            }
-        }
-
-        return $this->voter;
     }
 
     /**

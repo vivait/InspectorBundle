@@ -10,12 +10,7 @@ class InspectionEvent extends EntityEvent {
     /**
      * @var \Vivait\InspectorBundle\Entity\Inspection
      */
-    private $inspection;
-
-    function __construct(\Vivait\InspectorBundle\Entity\Inspection $inspection)
-    {
-        $this->inspection = $inspection;
-    }
+    protected $entity;
 
     /**
      * Gets inspection
@@ -23,7 +18,7 @@ class InspectionEvent extends EntityEvent {
      */
     public function getInspection()
     {
-        return $this->inspection;
+        return $this->entity;
     }
 
     /**
@@ -33,7 +28,7 @@ class InspectionEvent extends EntityEvent {
      */
     public function setInspection($inspection)
     {
-        $this->inspection = $inspection;
+        $this->entity = $inspection;
 
         return $this;
     }

@@ -66,7 +66,7 @@ abstract class Action implements ServiceEntity
      *
      * @return Inspection
      */
-    public function getInspection()
+    private function getInspection()
     {
         return $this->inspection;
     }

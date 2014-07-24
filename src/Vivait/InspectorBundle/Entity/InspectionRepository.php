@@ -12,7 +12,25 @@ class InspectionRepository extends EntityRepository
         $em->flush();
     }
 
-    public function delete(Inspection $event) {
-        $this->getEntityManager()->remove($event);
+    public function delete(Inspection $event, $flush = false) {
+        $entityManager = $this->getEntityManager();
+        $entityManager->remove($event);
+
+        if ($flush) {
+            $entityManager->flush();
+        }
+    }
+
+    /**
+     * @return Inspection[]
+     */
+    public function fetchInspections() {
+        $query = $this->createQueryBuilder('i')
+          ->select('i, c, a')
+          ->leftJoin('i.conditions', 'c')
+          ->leftJoin('i.actions', 'a')
+          ->getQuery();
+
+        return $query->getResult();
     }
 }

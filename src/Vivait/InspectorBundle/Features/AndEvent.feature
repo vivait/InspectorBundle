@@ -10,7 +10,7 @@ Feature: Trigger Event
       | fabian.poteincier@tests.vivait.co.uk | Fabien   | Potencier |
     And there are the following "VivaitInspectorBundle:Inspection":
       | eventName       | name       | voterType |
-      | customer.update | Behat test | 2         |
+      | customer.update | Behat test | and       |
     And there are the following "VivaitInspectorBundle:Condition\Expression":
       | expression                         | inspection       |
       | "customer.getForename() == 'John'" | @customer.update |

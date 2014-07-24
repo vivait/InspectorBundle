@@ -80,7 +80,7 @@ class InspectionController extends Controller
 
     public function delete(Inspection $inspection)
     {
-        $this->getRepository()->delete($inspection);
+        $this->getRepository()->delete($inspection, true);
         $this->dispatchEntityEvent(new InspectionEvent($inspection));
     }
 }

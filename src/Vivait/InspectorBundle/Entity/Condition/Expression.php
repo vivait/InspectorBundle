@@ -77,15 +77,17 @@ class Expression extends Condition implements ConditionInterface
     public function result($entities)
     {
         $language = new ExpressionLanguage();
-        $map = [];
-
-        foreach ($entities as $className =>$entity) {
-            $map[$this->getShortName($className)] = $entity;
-        }
+//        $map = [];
+//
+//        var_dump($entities);
+//
+//        foreach ($entities as $className =>$entity) {
+//            $map[$this->getShortName($className)] = $entity;
+//        }
 
         return $language->evaluate(
           $this->expression,
-          $map
+          $entities
         );
     }
 

@@ -26,7 +26,7 @@ class EventProviderService
         $events = [];
         foreach ($classes as $class) {
             if (is_a($class, 'Vivait\Voter\Model\EntityEvent', true)) {
-                $events += $class::getEvents();
+                $events += $class::supportsEvents();
             }
         }
 

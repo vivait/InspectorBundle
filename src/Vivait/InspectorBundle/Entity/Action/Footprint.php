@@ -20,11 +20,13 @@ use Vivait\InspectorBundle\Service\Action\FootprintService;
 class Footprint extends Action
 {
     /**
-     * @ORM\OneToOne(targetEntity="Vivait\FootprintBundle\Entity\CannedMessage", cascade={"persist", "remove"})
+     * @ORM\ManyToOne(targetEntity="Vivait\FootprintBundle\Entity\CannedMessage", cascade={"persist"})
+     * @ORM\JoinColumn(onDelete="SET NULL")
      */
     private $canned;
 
-    public function loadService(ContainerInterface $container) {
+    public function loadService(ContainerInterface $container)
+    {
         /* @var FootprintService $footprint */
         $footprint = $container->get('vivait_inspector.action.footprint');
         $footprint->setCannedMessage($this->getCanned());
@@ -59,5 +61,36 @@ class Footprint extends Action
     public function getFormType()
     {
         return 'vivait_inspectorbundle_action_footprint';
+    }
+
+    /**
+     * (PHP 5 &gt;= 5.1.0)<br/>
+     * String representation of object
+     * @link http://php.net/manual/en/serializable.serialize.php
+     * @return string the string representation of the object or null
+     */
+    public function serialize()
+    {
+        return serialize(
+          [
+              $this->getId()
+          ]
+        );
+    }
+
+    /**
+     * (PHP 5 &gt;= 5.1.0)<br/>
+     * Constructs the object
+     * @link http://php.net/manual/en/serializable.unserialize.php
+     * @param string $serialized <p>
+     *                           The string representation of the object.
+     *                           </p>
+     * @return void
+     */
+    public function unserialize($serialized)
+    {
+        list(
+          $this->canned
+          ) = unserialize($serialized);
     }
 }

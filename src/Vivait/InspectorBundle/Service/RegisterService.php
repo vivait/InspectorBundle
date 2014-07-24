@@ -10,7 +10,10 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Vivait\Common\Container\Service\LoaderService;
 use Vivait\InspectorBundle\Entity\Action;
+use Vivait\InspectorBundle\Model\ActionDispatcherFactory;
 use Vivait\Voter\Dispatcher\ActionDispatcher;
+use Vivait\Voter\Dispatcher\ActionDispatcherInterface;
+use Vivait\Voter\Dispatcher\LazyActionDispatcher;
 use Vivait\Voter\Model\EntityEvent;
 use Vivait\InspectorBundle\Entity\Inspection;
 
@@ -22,86 +25,49 @@ class RegisterService
     private $dispatcher;
 
     /**
-     * @var EntityManagerInterface
-     */
-    private $entity_manager;
-
-    /**
-     * @var LoaderService
-     */
-    private $serviceloader;
-
-    /**
      * @var LoggerInterface
      */
     private $logger;
 
+    /**
+     * @var ActionDispatcherFactory
+     */
+    private $actionDispatcherFactory;
+
     function __construct(
       EventDispatcherInterface $dispatcher,
-      EntityManagerInterface $entity_manager,
-      LoaderService $serviceloader,
+      ActionDispatcherFactory $actionDispatcherFactory,
       LoggerInterface $logger = null
     ) {
-        $this->dispatcher     = $dispatcher;
-        $this->entity_manager = $entity_manager;
-        $this->serviceloader  = $serviceloader;
+        $this->dispatcher = $dispatcher;
 
         if (!$logger) {
             $logger = new NullLogger();
         }
 
         $this->logger = $logger;
+        $this->actionDispatcherFactory = $actionDispatcherFactory;
     }
 
     /**
-     * @return Inspection[]
-     */
-    public function fetchInspections()
-    {
-        return $this->entity_manager->getRepository('VivaitInspectorBundle:Inspection')->findAll();
-    }
-
-    /**
-     * @param Inspection $inspection
-     * @return ActionDispatcher
-     * @throws \Exception
-     */
-    public function actionDispatcherFactory(Inspection $inspection)
-    {
-        $actions = $this->serviceloader->loadServices($inspection->getActions());
-
-        $voter = $inspection->getVoter();
-        $voter->addConditions($this->serviceloader->loadServices($inspection->getConditions()));
-
-        return new ActionDispatcher($inspection->getName(), $voter, $actions, $this->logger);
-    }
-
-    /**
-     * @param Inspection[]|Inspection $inspections
+     * @param string            $eventName The event name to listen to
+     * @param string|Inspection $inspection An inspection object or inspection ID to lazy load the inspection
+     * @param string            $inspectionName The inspection name, if an ID is passed as $inspection
      * @return $this
      */
-    public function registerInspections($inspections)
+    public function registerInspection($eventName, $inspection, $inspectionName = null)
     {
-        if (is_array($inspections)) {
-            foreach ($inspections as $row) {
-                $this->registerInspections($row);
+        if (!($inspection instanceOf Inspection)) {
+            if ($inspectionName === null) {
+                throw new \InvalidArgumentException('An inspection name must be provided for lazy loaded inspections');
             }
+
+            $actionDispatcher = new LazyActionDispatcher($inspection, $inspectionName, $this->actionDispatcherFactory);
         } else {
-            $eventName = $inspections->getEventName();
-            $inspectionName = $inspections->getName();
-
-            $handler = $this->actionDispatcherFactory($inspections);
-
-            $this->logger->debug(sprintf('Adding inspection "%s" for event "%s"', $inspectionName, $eventName));
-
-            $this->dispatcher->addListener(
-              $eventName,
-              function (EntityEvent $event, $eventName) use ($handler, $inspectionName) {
-                  $this->logger->info(sprintf('Calling inspection "%s" for event "%s"', $inspectionName, $eventName));
-                  $handler->perform($event->provides());
-              }
-            );
+            $actionDispatcher = $this->actionDispatcherFactory->create($inspection);
         }
+
+        $this->registerActionDispatcher($eventName, $actionDispatcher);
 
         return $this;
     }
@@ -126,4 +92,23 @@ class RegisterService
 
         return $this;
     }
-} 
+
+    /**
+     * @param                  $eventName
+     * @param ActionDispatcher $actionDispatcher
+     * @return $this
+     */
+    public function registerActionDispatcher($eventName, ActionDispatcherInterface $actionDispatcher)
+    {
+        $this->logger->debug(
+          sprintf('Adding inspection "%s" for event "%s"', $actionDispatcher->getName(), $eventName)
+        );
+
+        $this->dispatcher->addListener(
+          $eventName,
+          [$actionDispatcher, 'performFromEvent']
+        );
+
+        return $this;
+    }
+}

@@ -51,8 +51,7 @@ class VivaitInspectorExtension extends Extension
     }
 
     protected function loadEventsCache(ContainerBuilder $container, array $eventLocations){
-        $cachePath = $container->getParameterBag()->resolveValue('%kernel.cache_dir%/appInpsectionEvents.php');
-        $eventsCache = new ConfigCache($cachePath, $container->getParameter('kernel.debug'));
+        $eventsCache = $container->get('vivait_inspector.event.registry.configcache');
 
         if (!$eventsCache->isFresh()) {
             $events = $resources = [];
@@ -64,7 +63,8 @@ class VivaitInspectorExtension extends Extension
             $eventsCache->write('<?php return unserialize('.var_export(serialize($events), true).');', $resources);
         }
 
-        $events = include $cachePath;
+        $events = include (string)$eventsCache;
+
         return $events;
     }
 }
