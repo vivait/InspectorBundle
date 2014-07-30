@@ -10,7 +10,7 @@
     ],
     "require": {
         "php": ">=5.3",
-        "vivait/common": "~1.1,2.0.x-dev",
+        "vivait/common": "~2.0",
         "psr/log": "~1.0",
         "vivait/voter": "dev-master"
     },
