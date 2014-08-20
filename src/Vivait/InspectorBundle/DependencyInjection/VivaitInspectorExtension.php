@@ -45,26 +45,9 @@ class VivaitInspectorExtension extends Extension
           ->getDefinition('vivait_inspector.metadata.cache')
           ->replaceArgument(0, $cacheDirectory);
 
-        $container
-          ->getDefinition('vivait_inspector.event.registry')
-          ->addArgument($this->loadEventsCache($container, $config['event_locations']));
+//        $container
+//          ->getDefinition('vivait_inspector.event.registry')
+//          ->addArgument($this->loadEventsCache($container, $config['event_locations']));
     }
 
-    protected function loadEventsCache(ContainerBuilder $container, array $eventLocations){
-        $eventsCache = $container->get('vivait_inspector.event.registry.configcache');
-
-        if (!$eventsCache->isFresh()) {
-            $events = $resources = [];
-            foreach ($eventLocations as $namespace => $location) {
-                $resources[] = new DirectoryResource($location);
-                $events += $container->get('vivait_inspector.event.provider')->getEvents($namespace, $location);
-            }
-
-            $eventsCache->write('<?php return unserialize('.var_export(serialize($events), true).');', $resources);
-        }
-
-        $events = include (string)$eventsCache;
-
-        return $events;
-    }
 }

@@ -43,16 +43,21 @@ class LoadInspectionsListener
         $this->registerService = $registerService;
     }
 
-    public function registerInspectionsFromCache(GetResponseEvent $event)
+    public function registerInspectionsFromCacheEvent(GetResponseEvent $event)
     {
         if (!$event->isMasterRequest()) {
-            return;
+            return false;
         }
 
+        return $this->registerInspectionsFromCache();
+    }
+
+    public function registerInspectionsFromCache()
+    {
         if (!file_exists($this->cachePath)) {
             $this->logger->warning('No cache found for inspections');
 
-            return;
+            return false;
         }
 
         $map = include($this->cachePath);
@@ -61,7 +66,8 @@ class LoadInspectionsListener
             foreach ($inspections as $id => $inspectionName) {
                 $this->registerService->registerInspection($eventName, $id, $inspectionName);
             }
-
         }
+
+        return true;
     }
 }

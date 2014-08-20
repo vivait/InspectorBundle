@@ -50,7 +50,7 @@ services:
     class: %vivait_inspector.loadinspections.class%
     arguments: ['%kernel.cache_dir%/%vivait_inspector.inspections.cache%', @vivait_inspector.register]
     tags:
-      - { name: kernel.event_listener, event: kernel.request, method: registerInspectionsFromCache }
+      - { name: kernel.event_listener, event: kernel.request, method: registerInspectionsFromCacheEvent }
 
   vivait_inspector.actiondispatcher.factory:
     class: %vivait_inspector.actiondispatcher.factory.class%
@@ -103,10 +103,11 @@ services:
 
   vivait_inspector.event.registry:
     class: %vivait_inspector.event.registry.class%
+    arguments: ["@=service('vivait_inspector.event.provider').getEventsFromCache()"]
 
   vivait_inspector.event.provider:
     class: %vivait_inspector.event.provider.class%
-
+    arguments: ['@vivait_inspector.event.registry.configcache', '%vivait_inspector.event_locations%']
 
   vivait_inspector.voter.and:
     class: %vivait_inspector.voter.and.class%
