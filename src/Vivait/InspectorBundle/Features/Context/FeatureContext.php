@@ -81,9 +81,7 @@ class FeatureContext extends MinkContext
      */
     public function iTriggerAnEventOnACustomer($event, $customer)
     {
-        /* @var RegisterService $register */
-        $register = $this->getContainer()->get('vivait_inspector.register');
-        $register->registerInspections($register->fetchInspections());
+        $this->registerInspections();
 
         /* @var EventDispatcher $dispatcher */
         $dispatcher = $this->getContainer()->get('event_dispatcher');
@@ -177,6 +175,17 @@ class FeatureContext extends MinkContext
         }
         catch (ExpectationException $e) {
             // Do nothing
+        }
+    }
+
+    private function registerInspections()
+    {
+        /* @var RegisterService $register */
+        $register = $this->getContainer()->get('vivait_inspector.register');
+        $inspections = $this->getManager()->getRepository('VivaitInspectorBundle:Inspection')->fetchInspections();
+
+        foreach ($inspections as $inspection) {
+            $register->registerInspection($inspection->getEventName(), $inspection->getId(), $inspection->getName());
         }
     }
 }
