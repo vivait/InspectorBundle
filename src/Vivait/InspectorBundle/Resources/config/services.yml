@@ -1,9 +1,10 @@
 parameters:
-  vivait_inspector.register.class: Vivait\InspectorBundle\Service\RegisterService
+  vivait_inspector.register.class: Vivait\InspectorBundle\Service\Inspection\RegisterInspection
   vivait_inspector.serviceloader.class: Vivait\Common\Container\Service\LoaderService
 
   vivait_inspector.inspection.type.class: Vivait\InspectorBundle\Form\InspectionType
 
+  # TODO: These actions should be moved in to their own libraries
   vivait_inspector.action.sendemail.class: Vivait\InspectorBundle\Service\Action\SendEmailService
   vivait_inspector.action.sendemail.type.class: Vivait\InspectorBundle\Form\Action\SendEmailType
 
@@ -13,26 +14,24 @@ parameters:
   vivait_inspector.condition.type.class: Vivait\InspectorBundle\Form\ConditionType
   vivait_inspector.condition.expression.type.class: Vivait\InspectorBundle\Form\Condition\ExpressionType
 
-  vivait_inspector.event.registry.class: Vivait\InspectorBundle\Service\EventRegistryService
-  vivait_inspector.voter.registry.class: Vivait\InspectorBundle\Service\VoterRegistryService
-  vivait_inspector.event.provider.class: Vivait\InspectorBundle\Service\EventProviderService
+  vivait_inspector.event.registry.class: Vivait\InspectorBundle\Service\Event\EventRegistry
+  vivait_inspector.voter.registry.class: Vivait\InspectorBundle\Service\Voter\VoterRegistry
+  vivait_inspector.event.provider.class: Vivait\InspectorBundle\Service\Event\EventProvider
+  vivait_inspector.event.provider.cache.class: Vivait\InspectorBundle\Service\Event\EventCacheProvider
 
   vivait_inspector.voter.and.class: Vivait\Voter\Voter\AndVoter
   vivait_inspector.voter.or.class: Vivait\Voter\Voter\OrVoter
 
-  vivait_inspector.metadata_factory.class: Metadata\MetadataFactory
-  vivait_inspector.metadata.cache_class: Metadata\Cache\FileCache
-  vivait_inspector.metadata.annotation_driver.class: Vivait\InspectorBundle\Metadata\Driver\AnnotationDriver
-
   vivait_inspector.event.registry.configcache.class: Symfony\Component\Config\ConfigCache
-  vivait_inspector.inspection.cachewarmer.class: Vivait\InspectorBundle\CacheWarmer\InspectionCacheWarmer
+#  vivait_inspector.inspection.cachewarmer.class: Vivait\InspectorBundle\CacheWarmer\InspectionCacheWarmer
 
-  vivait_inspector.loadinspections.class: Vivait\InspectorBundle\EventListener\LoadInspectionsListener
-
-  vivait_inspector.inspections.cache: appInpsection.php
+  vivait_inspector.event.registry.cache: appInspectionEvents.php
+ # vivait_inspector.inspections.cache: appInpsection.php
 
   vivait_inspector.actiondispatcher.factory.class: Vivait\InspectorBundle\Model\ActionDispatcherFactory
   vivait_inspector.repository.inspections.class: Vivait\InspectorBundle\Entity\InspectionRepository
+
+  vivait_inspector.event_dispatcher.class: Vivait\InspectorBundle\EventDispatcher\LazyLoadEventDispatcher
 
 services:
   vivait_inspection.repository.inspections:
@@ -44,13 +43,7 @@ services:
 
   vivait_inspector.register:
     class: %vivait_inspector.register.class%
-    arguments: [@event_dispatcher, @vivait_inspector.actiondispatcher.factory]
-
-  vivait_inspector.loadinspections:
-    class: %vivait_inspector.loadinspections.class%
-    arguments: ['%kernel.cache_dir%/%vivait_inspector.inspections.cache%', @vivait_inspector.register]
-    tags:
-      - { name: kernel.event_listener, event: kernel.request, method: registerInspectionsFromCacheEvent }
+    arguments: [@vivait_inspector.actiondispatcher.factory]
 
   vivait_inspector.actiondispatcher.factory:
     class: %vivait_inspector.actiondispatcher.factory.class%
@@ -103,10 +96,10 @@ services:
 
   vivait_inspector.event.registry:
     class: %vivait_inspector.event.registry.class%
-    arguments: ["@=service('vivait_inspector.event.provider').getEventsFromCache()"]
+    arguments: ["@=service('vivait_inspector.event.provider').getEvents()"]
 
   vivait_inspector.event.provider:
-    class: %vivait_inspector.event.provider.class%
+    class: %vivait_inspector.event.provider.cache.class%
     arguments: ['@vivait_inspector.event.registry.configcache', '%vivait_inspector.event_locations%']
 
   vivait_inspector.voter.and:
@@ -119,28 +112,18 @@ services:
     tags:
        -  { name: vivait_inspector.voter, alias: 'or', label: 'Or' }
 
-  vivait_inspector.metadata.annotation_driver:
-    class: %vivait_inspector.metadata.annotation_driver.class%
-    public: false
-    arguments: ['@annotation_reader']
-
-  vivait_inspector.metadata_factory:
-    class: %vivait_inspector.metadata_factory.class%
-    arguments: ['@vivait_inspector.metadata.annotation_driver']
-
-  vivait_inspector.metadata.cache:
-    class: %vivait_inspector.metadata.cache_class%
-    arguments: ['']
-    public: false
-
   vivait_inspector.event.registry.configcache:
     class: %vivait_inspector.event.registry.configcache.class%
-    arguments: ['%kernel.cache_dir%/appInpsectionEvents.php', '%kernel.debug%']
+    arguments: ['%kernel.cache_dir%/%vivait_inspector.event.registry.cache%', '%kernel.debug%']
 
-  vivait_inspector.inpsection.cachewarmer:
-    class: %vivait_inspector.inspection.cachewarmer.class%
-    arguments: [@doctrine.orm.default_entity_manager]
-    calls:
-      - [setCacheFile, ['%vivait_inspector.inspections.cache%']]
-    tags:
-       -  { name: kernel.cache_warmer }
+#  vivait_inspector.inpsection.cachewarmer:
+#    class: %vivait_inspector.inspection.cachewarmer.class%
+#    arguments: [@doctrine.orm.default_entity_manager]
+#    calls:
+#      - [setCacheFile, ['%vivait_inspector.inspections.cache%']]
+#    tags:
+#       -  { name: kernel.cache_warmer }
+
+  vivait_inspector.event_dispatcher:
+     class: %vivait_inspector.event_dispatcher.class%
+     arguments: ['@vivait_inspector.event_dispatcher.inner', '@vivait_inspection.repository.inspections', '@vivait_inspector.register']

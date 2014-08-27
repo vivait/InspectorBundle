@@ -1,11 +1,12 @@
 <?php
 
-namespace Vivait\InspectorBundle\Service;
+namespace Vivait\InspectorBundle\Service\Voter;
 
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Vivait\InspectorBundle\Service\Voter;
 use Vivait\Voter\Model\VoterInterface;
 
-class VoterRegistryService
+class VoterRegistry
 {
     private $voters = [];
     private $voter_labels = [];
@@ -36,7 +37,7 @@ class VoterRegistryService
 
     /**
      * @param $alias
-     * @return Voter
+     * @return VoterInterface
      */
     public function getVoter($alias)
     {

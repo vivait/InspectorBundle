@@ -9,7 +9,7 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 abstract class ActionType extends AbstractType
 {
     protected $dataClass = 'Vivait\InspectorBundle\Entity\Action';
-    protected $label     = 'SendEmail';
+    protected $label     = 'Action';
 
     /**
      * @param FormBuilderInterface $builder
@@ -43,7 +43,8 @@ abstract class ActionType extends AbstractType
     {
         $resolver->setDefaults(
           array(
-            'data_class' => $this->dataClass
+            'data_class' => $this->dataClass,
+            'model_class' => $this->dataClass
           )
         );
     }

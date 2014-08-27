@@ -34,20 +34,20 @@ class VivaitInspectorExtension extends Extension
 
         $container->setParameter('vivait_inspector.event_locations', $config['event_locations']);
 
-        // probably make this configurable...
-        $cacheDirectory = '%kernel.cache_dir%/vivaitinspector_event_annotation';
-        $cacheDirectory = $container->getParameterBag()->resolveValue($cacheDirectory);
-        if (!is_dir($cacheDirectory)) {
-            mkdir($cacheDirectory, 0777, true);
+//        // probably make this configurable...
+//        $cacheDirectory = '%kernel.cache_dir%/vivaitinspector_event_annotation';
+//        $cacheDirectory = $container->getParameterBag()->resolveValue($cacheDirectory);
+//        if (!is_dir($cacheDirectory)) {
+//            mkdir($cacheDirectory, 0777, true);
+//        }
+
+        // Invalidate the config cache now the config might have changed
+        $configcache = $container->getDefinition('vivait_inspector.event.registry.configcache');
+        $cacheFile = $container->getParameterBag()->resolveValue($configcache->getArgument(0));
+
+        if (file_exists($cacheFile)) {
+            unlink($cacheFile);
         }
-
-        $container
-          ->getDefinition('vivait_inspector.metadata.cache')
-          ->replaceArgument(0, $cacheDirectory);
-
-//        $container
-//          ->getDefinition('vivait_inspector.event.registry')
-//          ->addArgument($this->loadEventsCache($container, $config['event_locations']));
     }
 
 }

@@ -8,7 +8,7 @@ use Psr\Log\NullLogger;
 use Vivait\Common\Container\Service\LoaderService;
 use Vivait\InspectorBundle\Entity\Inspection;
 use Vivait\InspectorBundle\Entity\InspectionRepository;
-use Vivait\InspectorBundle\Service\VoterRegistryService;
+use Vivait\InspectorBundle\Service\Voter\VoterRegistry;
 use Vivait\Voter\Dispatcher\ActionDispatcher;
 
 class ActionDispatcherFactory
@@ -24,7 +24,7 @@ class ActionDispatcherFactory
     private $serviceLoader;
 
     /**
-     * @var VoterRegistryService
+     * @var \Vivait\InspectorBundle\Service\Voter\VoterRegistry
      */
     private $voterRegistry;
 
@@ -36,7 +36,7 @@ class ActionDispatcherFactory
     function __construct(
       InspectionRepository $inspectionRepository,
       LoaderService $serviceLoader,
-      VoterRegistryService $voterRegistry,
+      VoterRegistry $voterRegistry,
       LoggerInterface $logger = null
     ) {
         $this->inspectionRepository = $inspectionRepository;

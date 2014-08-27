@@ -1,8 +1,11 @@
 <?php
 
-namespace Vivait\InspectorBundle\Service;
+namespace Vivait\InspectorBundle\Service\Event;
 
-class EventRegistryService
+/**
+ * Contains a register of all compatible events
+ */
+class EventRegistry
 {
     private $events;
 
@@ -17,7 +20,6 @@ class EventRegistryService
     /**
      * @param string $label
      * @param string $event
-     * @todo This needs to store what each event provides
      */
     public function addEvent($label, $event)
     {

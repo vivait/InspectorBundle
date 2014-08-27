@@ -2,9 +2,11 @@
 
 namespace Vivait\InspectorBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityRepository;
+use Vivait\InspectorBundle\Model\InspectionProviderInterface;
 
-class InspectionRepository extends EntityRepository
+class InspectionRepository extends EntityRepository implements InspectionProviderInterface
 {
     public function save(Inspection $event) {
         $em = $this->getEntityManager();
@@ -32,5 +34,9 @@ class InspectionRepository extends EntityRepository
           ->getQuery();
 
         return $query->getResult();
+    }
+
+    public function getInspections() {
+        return $this->fetchInspections();
     }
 }

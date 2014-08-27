@@ -7,11 +7,11 @@ use Prophecy\Argument;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Vivait\Voter\Model\ActionInterface;
 use Vivait\InspectorBundle\Entity\Inspection;
-use Vivait\InspectorBundle\Service\RegisterService;
+use Vivait\InspectorBundle\Service\Inspection\RegisterInspection;
 use Vivait\Voter\Model\VoterInterface;
 
 /**
- * @mixin RegisterService
+ * @mixin \Vivait\InspectorBundle\Service\Inspection\RegisterInspection
  */
 class RegisterServiceSpec extends ObjectBehavior
 {

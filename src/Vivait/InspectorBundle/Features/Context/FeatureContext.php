@@ -23,7 +23,7 @@ use Behat\Gherkin\Node\PyStringNode,
 use Viva\BravoBundle\Entity\Customer;
 use Viva\BravoBundle\Exception\ExistingOfferException;
 use Vivait\BehatAliceLoader\AliceContext;
-use Vivait\InspectorBundle\Service\RegisterService;
+use Vivait\InspectorBundle\Service\Inspection\RegisterInspection;
 
 //
 // Require 3rd-party libraries here:
@@ -81,7 +81,7 @@ class FeatureContext extends MinkContext
      */
     public function iTriggerAnEventOnACustomer($event, $customer)
     {
-        $this->registerInspections();
+//        $this->registerInspections();
 
         /* @var EventDispatcher $dispatcher */
         $dispatcher = $this->getContainer()->get('event_dispatcher');
@@ -180,7 +180,7 @@ class FeatureContext extends MinkContext
 
     private function registerInspections()
     {
-        /* @var RegisterService $register */
+        /* @var RegisterInspection $register */
         $register = $this->getContainer()->get('vivait_inspector.register');
         $inspections = $this->getManager()->getRepository('VivaitInspectorBundle:Inspection')->fetchInspections();
 

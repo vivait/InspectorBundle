@@ -1,6 +1,6 @@
 <?php
 
-namespace Vivait\InspectorBundle\Service;
+namespace Vivait\InspectorBundle\Service\Inspection;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
@@ -17,7 +17,7 @@ use Vivait\Voter\Dispatcher\LazyActionDispatcher;
 use Vivait\Voter\Model\EntityEvent;
 use Vivait\InspectorBundle\Entity\Inspection;
 
-class RegisterService
+class RegisterInspection
 {
     /**
      * @var EventDispatcherInterface
@@ -35,8 +35,8 @@ class RegisterService
     private $actionDispatcherFactory;
 
     function __construct(
-      EventDispatcherInterface $dispatcher,
       ActionDispatcherFactory $actionDispatcherFactory,
+      EventDispatcherInterface $dispatcher = null,
       LoggerInterface $logger = null
     ) {
         $this->dispatcher = $dispatcher;
@@ -57,6 +57,10 @@ class RegisterService
      */
     public function registerInspection($eventName, $inspection, $inspectionName = null)
     {
+        if (!$this->dispatcher) {
+            throw new \LogicException('No dispatcher specified when trying to register an inspection event');
+        }
+
         if (!($inspection instanceOf Inspection)) {
             if ($inspectionName === null) {
                 throw new \InvalidArgumentException('An inspection name must be provided for lazy loaded inspections');
@@ -108,6 +112,18 @@ class RegisterService
           $eventName,
           [$actionDispatcher, 'performFromEvent']
         );
+
+        return $this;
+    }
+
+    /**
+     * Sets dispatcher
+     * @param EventDispatcherInterface $dispatcher
+     * @return $this
+     */
+    public function setDispatcher($dispatcher)
+    {
+        $this->dispatcher = $dispatcher;
 
         return $this;
     }

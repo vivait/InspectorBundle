@@ -9,7 +9,7 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 abstract class ConditionType extends AbstractType
 {
     protected $dataClass = 'Vivait\InspectorBundle\Entity\Condition';
-    protected $label     = 'SendEmail';
+    protected $label     = 'Condition';
 
     /**
      * @param FormBuilderInterface $builder
@@ -43,7 +43,8 @@ abstract class ConditionType extends AbstractType
     {
         $resolver->setDefaults(
           array(
-            'data_class' => $this->dataClass
+            'data_class' => $this->dataClass,
+            'model_class' => $this->dataClass
           )
         );
     }

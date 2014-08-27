@@ -8,8 +8,8 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Vivait\InspectorBundle\Entity\Action;
 use Vivait\InspectorBundle\Entity\Condition;
-use Vivait\InspectorBundle\Service\EventRegistryService;
-use Vivait\InspectorBundle\Service\VoterRegistryService;
+use Vivait\InspectorBundle\Service\Event\EventRegistry;
+use Vivait\InspectorBundle\Service\Voter\VoterRegistry;
 
 class InspectionType extends AbstractType
 {
@@ -41,7 +41,7 @@ class InspectionType extends AbstractType
         $this->eventsList = $eventsList;
     }
 
-    public static function factory(EntityManagerInterface $em, VoterRegistryService $registry, EventRegistryService $eventRegistry)
+    public static function factory(EntityManagerInterface $em, VoterRegistry $registry, EventRegistry $eventRegistry)
     {
         return new static(
           array_map(
