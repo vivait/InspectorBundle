@@ -25,13 +25,15 @@ parameters:
   vivait_inspector.event.registry.configcache.class: Symfony\Component\Config\ConfigCache
 #  vivait_inspector.inspection.cachewarmer.class: Vivait\InspectorBundle\CacheWarmer\InspectionCacheWarmer
 
+  vivait_inspector.loadinspections.class: Vivait\InspectorBundle\EventListener\LoadInspectionsListener
+
   vivait_inspector.event.registry.cache: appInspectionEvents.php
  # vivait_inspector.inspections.cache: appInpsection.php
 
   vivait_inspector.actiondispatcher.factory.class: Vivait\InspectorBundle\Model\ActionDispatcherFactory
   vivait_inspector.repository.inspections.class: Vivait\InspectorBundle\Entity\InspectionRepository
 
-  vivait_inspector.event_dispatcher.class: Vivait\InspectorBundle\EventDispatcher\LazyLoadEventDispatcher
+  vivait_inspector.event_dispatcher.class: Vivait\InspectorBundle\EventDispatcher\PreEventDispatcher
 
 services:
   vivait_inspection.repository.inspections:
@@ -43,7 +45,14 @@ services:
 
   vivait_inspector.register:
     class: %vivait_inspector.register.class%
-    arguments: [@vivait_inspector.actiondispatcher.factory]
+    arguments: [@vivait_inspector.actiondispatcher.factory, @event_dispatcher]
+
+  vivait_inspector.loadinspections:
+    class: %vivait_inspector.loadinspections.class%
+    arguments: [@vivait_inspection.repository.inspections, @vivait_inspector.register]
+    tags:
+      - { name: kernel.event_listener, event: vivait_inspector.pre_dispatch, method: registerInspections }
+
 
   vivait_inspector.actiondispatcher.factory:
     class: %vivait_inspector.actiondispatcher.factory.class%
@@ -126,4 +135,4 @@ services:
 
   vivait_inspector.event_dispatcher:
      class: %vivait_inspector.event_dispatcher.class%
-     arguments: ['@vivait_inspector.event_dispatcher.inner', '@vivait_inspection.repository.inspections', '@vivait_inspector.register']
+     arguments: ['@vivait_inspector.event_dispatcher.inner']

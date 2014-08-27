@@ -11,13 +11,15 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Vivait\InspectorBundle\Model\InspectionProviderInterface;
 use Vivait\InspectorBundle\Service\Inspection\RegisterInspection;
 
-class LazyLoadEventDispatcher implements EventDispatcherInterface
+class PreEventDispatcher implements EventDispatcherInterface
 {
 
     /**
      * @var ContainerAwareEventDispatcher
      */
     private $dispatcher;
+
+    private $pre_dispatcher_ran = false;
 
     /**
      * Constructor.
@@ -26,13 +28,10 @@ class LazyLoadEventDispatcher implements EventDispatcherInterface
      * will be composed.
      *
      * @param ContainerAwareEventDispatcher|EventDispatcherInterface $dispatcher
-     * @param InspectionProviderInterface                            $provider
-     * @param RegisterInspection                                     $registerService
      */
-    public function __construct(EventDispatcherInterface $dispatcher = null, InspectionProviderInterface $provider, RegisterInspection $registerService)
+    public function __construct(EventDispatcherInterface $dispatcher = null)
     {
         $this->dispatcher = $dispatcher ?: new EventDispatcher();
-        $this->registerInspections($provider, $registerService);
     }
 
     /**
@@ -50,6 +49,11 @@ class LazyLoadEventDispatcher implements EventDispatcherInterface
      */
     public function dispatch($eventName, Event $event = null)
     {
+        if (!$this->pre_dispatcher_ran) {
+            $this->pre_dispatcher_ran = true;
+            $this->dispatcher->dispatch('vivait_inspector.pre_dispatch');
+        }
+
         return $this->dispatcher->dispatch($eventName, $event);
     }
 
@@ -165,17 +169,5 @@ class LazyLoadEventDispatcher implements EventDispatcherInterface
     function __call($method, $args)
     {
         return call_user_func_array([$this->dispatcher, $method], $args);
-    }
-
-    /**
-     * @param InspectionProviderInterface $provider
-     * @param \Vivait\InspectorBundle\Service\Inspection\RegisterInspection             $registerService
-     */
-    private function registerInspections(InspectionProviderInterface $provider, RegisterInspection $registerService)
-    {
-        $registerService->setDispatcher($this->dispatcher);
-        foreach ($provider->getInspections() as $inspection) {
-            $registerService->registerInspection($inspection->getEventName(), $inspection->getId(), $inspection->getName());
-        }
     }
 }
