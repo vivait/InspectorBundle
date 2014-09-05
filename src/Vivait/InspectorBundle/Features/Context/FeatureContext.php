@@ -79,7 +79,7 @@ class FeatureContext extends MinkContext
      * @When /^I trigger a \'([^\']*)\' event on (customer [^']+)$/
      * @When /^I trigger an \'([^\']*)\' event on (customer [^']+)$/
      */
-    public function iTriggerAnEventOnACustomer($event, $customer)
+    public function iTriggerAnEventOnACustomer($event, Customer $customer)
     {
 //        $this->registerInspections();
 
@@ -178,14 +178,14 @@ class FeatureContext extends MinkContext
         }
     }
 
-    private function registerInspections()
+    /**
+     * @Given /^I update the name of (customer [^']+) to "([^"]*)" "([^"]*)"$/
+     */
+    public function iUpdateTheNameOfCustomerTo(Customer $customer, $first_name, $last_name)
     {
-        /* @var RegisterInspection $register */
-        $register = $this->getContainer()->get('vivait_inspector.register');
-        $inspections = $this->getManager()->getRepository('VivaitInspectorBundle:Inspection')->fetchInspections();
+        $customer->setForename($first_name);
+        $customer->setSurname($last_name);
 
-        foreach ($inspections as $inspection) {
-            $register->registerInspection($inspection->getEventName(), $inspection->getId(), $inspection->getName());
-        }
+        $this->iTriggerAnEventOnACustomer('customer.update', $customer);
     }
 }

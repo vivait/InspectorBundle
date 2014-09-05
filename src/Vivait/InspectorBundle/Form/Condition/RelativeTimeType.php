@@ -6,10 +6,10 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Vivait\InspectorBundle\Form\ConditionType;
 
-class ExpressionType extends ConditionType
+class RelativeTimeType extends ConditionType
 {
-    protected $dataClass = 'Vivait\InspectorBundle\Entity\Condition\Expression';
-    protected $label     = 'Expression';
+    protected $dataClass = 'Vivait\InspectorBundle\Entity\Condition\RelativeTime';
+    protected $label     = 'Relative Time';
 
     /**
      * @param FormBuilderInterface $builder
@@ -19,7 +19,9 @@ class ExpressionType extends ConditionType
     {
         parent::buildForm($builder, $options);
 
-        $builder->add('expression');
+        $builder->add('expression', 'text', [
+              'label' => 'Perform after'
+          ]);
     }
 
     /**
@@ -27,6 +29,6 @@ class ExpressionType extends ConditionType
      */
     public function getName()
     {
-        return 'vivait_inspectorbundle_condition_expression';
+        return 'vivait_inspectorbundle_condition_relativetime';
     }
 }

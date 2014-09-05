@@ -15,7 +15,7 @@ class EventProvider
     /**
      * @var string[]
      */
-    private $eventLocations;
+    protected $eventLocations;
 
     function __construct(array $eventLocations)
     {

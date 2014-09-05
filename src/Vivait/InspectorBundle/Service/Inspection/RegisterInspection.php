@@ -2,19 +2,14 @@
 
 namespace Vivait\InspectorBundle\Service\Inspection;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Vivait\Common\Container\Service\LoaderService;
 use Vivait\InspectorBundle\Entity\Action;
 use Vivait\InspectorBundle\Model\ActionDispatcherFactory;
 use Vivait\Voter\Dispatcher\ActionDispatcher;
 use Vivait\Voter\Dispatcher\ActionDispatcherInterface;
 use Vivait\Voter\Dispatcher\LazyActionDispatcher;
-use Vivait\Voter\Model\EntityEvent;
 use Vivait\InspectorBundle\Entity\Inspection;
 
 class RegisterInspection

@@ -66,11 +66,31 @@ class Inspection
 
     /**
      * Constructor
+     * @param null  $name
+     * @param null  $eventName
+     * @param int   $voterType
+     * @param array $conditions
+     * @param array $actions
      */
-    public function __construct()
+    public function __construct($name = null, $eventName = null, $voterType = self::VOTER_TYPE_AND, array $conditions = [], array $actions = [])
     {
-        $this->conditions = new ArrayCollection();
-        $this->actions    = new ArrayCollection();
+        $this->name = $name;
+        $this->eventName = $eventName;
+        $this->voterType = $voterType;
+        $this->conditions = new ArrayCollection($conditions);
+        $this->actions    = new ArrayCollection($actions);
+    }
+
+    /**
+     * Sets id
+     * @param int $id
+     * @return $this
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+
+        return $this;
     }
 
     /**

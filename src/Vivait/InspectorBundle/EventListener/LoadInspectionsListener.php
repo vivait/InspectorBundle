@@ -6,6 +6,7 @@ use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Vivait\InspectorBundle\Entity\Action;
+use Vivait\InspectorBundle\Entity\Inspection;
 use Vivait\InspectorBundle\Model\InspectionProviderInterface;
 use Vivait\InspectorBundle\Service\Inspection\RegisterInspection;
 
@@ -32,8 +33,22 @@ class LoadInspectionsListener
 
     public function registerInspections()
     {
-        foreach ($this->provider->getInspections() as $inspection) {
-            $this->registerInspection->registerInspection($inspection->getEventName(), $inspection->getId(), $inspection->getName());
+        try {
+            if (!$this->provider) {
+                throw new \RuntimeException('No inspection provider has been specified');
+            }
+
+            foreach ($this->provider->getInspections() as $id => $inspection) {
+                if ($inspection instanceOf Inspection) {
+                    $this->registerInspection->registerInspection($inspection->getEventName(), $inspection->getId(), $inspection->getName());
+                }
+                else {
+                    $this->registerInspection->registerInspection($inspection['eventName'], $id, $inspection['name']);
+                }
+            }
+        }
+        catch (\Exception $e) {
+            var_dump($e);
         }
 
         return true;

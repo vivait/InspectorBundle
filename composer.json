@@ -12,7 +12,9 @@
         "php": ">=5.3",
         "vivait/common": "~2.0",
         "psr/log": "~1.0",
-        "vivait/voter": "dev-master"
+        "pda/pheanstalk": "~2.1",
+        "vivait/voter": "dev-master",
+        "doctrine/orm": ">=2.2.3"
     },
     "require-dev": {
         "phpspec/phpspec": "dev-master",

@@ -12,7 +12,13 @@ parameters:
   vivait_inspector.action.footprint.type.class: Vivait\InspectorBundle\Form\Action\FootprintType
 
   vivait_inspector.condition.type.class: Vivait\InspectorBundle\Form\ConditionType
+
   vivait_inspector.condition.expression.type.class: Vivait\InspectorBundle\Form\Condition\ExpressionType
+  vivait_inspector.condition.relativetime.type.class: Vivait\InspectorBundle\Form\Condition\RelativeTimeType
+
+  vivait_inspector.condition.queue.class: Vivait\InspectorBundle\Condition\Queue
+  vivait_inspector.queue.beanstalk.class: Vivait\InspectorBundle\Queue\Beanstalk
+  vivait_inspector.serializer.doctrineorm.class: Vivait\InspectorBundle\Serializer\DoctrineORM
 
   vivait_inspector.event.registry.class: Vivait\InspectorBundle\Service\Event\EventRegistry
   vivait_inspector.voter.registry.class: Vivait\InspectorBundle\Service\Voter\VoterRegistry
@@ -85,6 +91,11 @@ services:
     tags:
        -  { name: form.type,  alias: vivait_inspectorbundle_condition }
 
+  vivait_inspector.condition.relativetime.type:
+    class: %vivait_inspector.condition.relativetime.type.class%
+    tags:
+       -  { name: form.type,  alias: vivait_inspectorbundle_condition_relativetime }
+
   vivait_inspector.action.footprint.type:
     class: %vivait_inspector.action.footprint.type.class%
     tags:
@@ -100,6 +111,17 @@ services:
     tags:
        -  { name: form.type,  alias: vivait_inspectorbundle_condition_expression }
 
+  vivait_inspector.serializer.doctrineorm:
+    class: %vivait_inspector.serializer.doctrineorm.class%
+
+  vivait_inspector.queue.beanstalk:
+    class: %vivait_inspector.queue.beanstalk.class%
+    arguments: ['@leezy.pheanstalk']
+
+  vivait_inspector.condition.queue:
+    class: %vivait_inspector.condition.queue.class%
+    arguments: ['@vivait_inspector.queue.beanstalk', '@vivait_inspector.serializer.doctrineorm']
+
   vivait_inspector.voter.registry:
     class: %vivait_inspector.voter.registry.class%
 
@@ -109,7 +131,7 @@ services:
 
   vivait_inspector.event.provider:
     class: %vivait_inspector.event.provider.cache.class%
-    arguments: ['@vivait_inspector.event.registry.configcache', '%vivait_inspector.event_locations%']
+    arguments: ['%vivait_inspector.event_locations%', '@vivait_inspector.event.registry.configcache']
 
   vivait_inspector.voter.and:
     class: %vivait_inspector.voter.and.class%

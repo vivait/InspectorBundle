@@ -15,17 +15,17 @@ class EventCacheProvider extends EventProvider
     /**
      * @var ConfigCache
      */
-    private $configCache;
+    protected $configCache;
 
     /**
      * @var string[]
      */
-    private $eventLocations;
+    protected $eventLocations;
 
-    function __construct(ConfigCache $configCache, array $eventLocations)
+    function __construct(array $eventLocations, ConfigCache $configCache)
     {
-        $this->configCache = $configCache;
         $this->eventLocations = $eventLocations;
+        $this->configCache = $configCache;
     }
 
     public function getEvents(){
