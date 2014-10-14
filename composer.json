@@ -12,7 +12,7 @@
         "php": ">=5.3",
         "vivait/common": "~2.0",
         "psr/log": "~1.0",
-        "pda/pheanstalk": "~2.1",
+        "leezy/pheanstalk-bundle": "~2.0",
         "vivait/voter": "dev-master",
         "doctrine/orm": ">=2.2.3"
     },
